@@ -1,0 +1,23 @@
+{
+  "name": "rafl_tokenlab_desafio",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:rodolfoafl/rafl_tokenlab_desafio.git",
+  "author": "Rodolfo Leal <27327749+rodolfoafl@users.noreply.github.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsx watch src/server.ts"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "fastify": "^4.25.2",
+    "typescript": "^5.3.3",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@rocketseat/eslint-config": "^2.1.0",
+    "@types/node": "^20.10.7",
+    "eslint": "^8.56.0",
+    "tsx": "^4.7.0"
+  }
+}
