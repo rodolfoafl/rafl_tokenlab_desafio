@@ -6,7 +6,7 @@ declare module 'knex/types/tables' {
     users: {
       id: string
       name: string
-      email: number
+      email: string
       password: string
       created_at: string
     }
