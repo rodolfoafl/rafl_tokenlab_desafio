@@ -7,12 +7,14 @@ export async function eventsRoutes(app: FastifyInstance) {
       description: z.string(),
       startDate: z.string(),
       endDate: z.string(),
-      userId: z.string(),
     })
 
-    const { description, startDate, endDate, userId } =
-      createEventBodySchema.parse(req.body)
-    console.log(description, startDate, endDate, userId)
+    // userId - get from session cookie
+
+    const { description, startDate, endDate } = createEventBodySchema.parse(
+      req.body,
+    )
+    console.log(description, startDate, endDate)
     // TODO: create event
 
     return reply.status(201).send()
