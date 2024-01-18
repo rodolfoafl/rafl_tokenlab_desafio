@@ -13,7 +13,7 @@ declare module 'knex/types/tables' {
     events: {
       id: string
       description: string
-      starDate: string
+      startDate: string
       endDate: string
       userId: string
     }
