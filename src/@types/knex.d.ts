@@ -8,6 +8,7 @@ declare module 'knex/types/tables' {
       name: string
       email: number
       password: string
+      created_at: string
     }
     events: {
       id: string
