@@ -6,12 +6,14 @@
   "author": "Rodolfo Leal <27327749+rodolfoafl@users.noreply.github.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "knex": "node --import tsx ./node_modules/.bin/knex"
   },
   "dependencies": {
     "@fastify/cookie": "^9.3.0",
     "dotenv": "^16.3.1",
     "fastify": "^4.25.2",
+    "knex": "^3.1.0",
     "typescript": "^5.3.3",
     "zod": "^3.22.4"
   },
@@ -19,6 +21,7 @@
     "@rocketseat/eslint-config": "^2.1.0",
     "@types/node": "^20.10.7",
     "eslint": "^8.56.0",
+    "sqlite3": "^5.1.7",
     "tsx": "^4.7.0"
   }
 }
