@@ -1,8 +1,11 @@
 import { useCookies } from 'react-cookie'
-import { createContext } from 'react'
+import { createContext, useState } from 'react'
 
 interface AuthenticationContextType {
   userSessionId: string | null
+  userName: string
+  setUserName: (value: string) => void
+  logout: () => void
 }
 
 export const AuthenticationContext = createContext(
@@ -10,14 +13,22 @@ export const AuthenticationContext = createContext(
 )
 
 export const AuthenticationContextProvider = ({ children }: any) => {
-  const [cookies] = useCookies(['userSessionId'])
+  const [userName, setUserName] = useState('')
 
-  const userSessionId = cookies.userSessionId
+  const [cookie, setCookie, removeCookie] = useCookies(['userSessionId'])
+  const userSessionId = cookie.userSessionId
+
+  const logout = () => {
+    removeCookie('userSessionId')
+  }
 
   return (
     <AuthenticationContext.Provider
       value={{
         userSessionId,
+        userName,
+        setUserName,
+        logout,
       }}
     >
       {children}

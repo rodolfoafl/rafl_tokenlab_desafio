@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@fastify/cookie": "^9.3.0",
+    "@fastify/cors": "^8.5.0",
     "dotenv": "^16.3.1",
     "fastify": "^4.25.2",
     "knex": "^3.1.0",

@@ -10,7 +10,7 @@ export default function Authentication() {
   const [isRegisterFormEnabled, setIsRegisterFormEnabled] = useState(false)
 
   if (userSessionId) {
-    return <Navigate to="/home" replace={true} />
+    return <Navigate to="/" replace={true} />
   }
 
   const enableRegisterForm = (value: boolean) => {

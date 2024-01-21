@@ -56,15 +56,17 @@ export async function eventsRoutes(app: FastifyInstance) {
       return reply.status(409).send()
     }
 
+    const id = crypto.randomUUID()
+
     await knex('events').insert({
-      id: crypto.randomUUID(),
+      id,
       description,
       startDate,
       endDate,
       userId: userSessionId,
     })
 
-    return reply.status(201).send()
+    return reply.status(201).send({ id })
   })
 
   app.put(

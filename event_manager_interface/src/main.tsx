@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
 import './index.css'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
@@ -8,6 +7,8 @@ import Authentication from './pages/Auth/index.tsx'
 import { ErrorPage } from './pages/Error/index.tsx'
 import { ProtectedRoutes } from './components/Protected/index.tsx'
 import { AuthenticationContextProvider } from './contexts/Authentication/AuthenticationContext.tsx'
+import Home from './pages/Home/index.tsx'
+import { EventsProvider } from './contexts/Events/EventsContext.tsx'
 
 const router = createBrowserRouter([
   {
@@ -19,8 +20,8 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: '/home',
-        element: <App />,
+        path: '/',
+        element: <Home />,
       },
     ],
   },
@@ -29,7 +30,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthenticationContextProvider>
-      <RouterProvider router={router} />
+      <EventsProvider>
+        <RouterProvider router={router} />
+      </EventsProvider>
     </AuthenticationContextProvider>
   </React.StrictMode>,
 )

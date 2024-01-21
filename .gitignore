@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 # Database
-db/*.db
+./rest_api/db/*.db

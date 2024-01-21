@@ -3,23 +3,25 @@ import { AxiosError } from 'axios'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useNavigate } from 'react-router-dom'
+import { useContext, useState } from 'react'
+import { AuthenticationContext } from '../../contexts/Authentication/AuthenticationContext'
 
 interface LoginFormProps {
   enableRegisterForm: (value: boolean) => void
 }
 
 const loginFormSchema = z.object({
-  email: z.string().email({ message: 'Insira um email válido' }),
+  email: z.string().email({ message: 'insira um email válido' }),
   password: z
     .string()
-    .min(6, { message: 'A senha deve ter no mínimo 6 caracteres' }),
+    .min(6, { message: 'a senha deve ter no mínimo 6 caracteres' }),
 })
 
 type LoginFormSchema = z.infer<typeof loginFormSchema>
 
 export default function LoginForm({ enableRegisterForm }: LoginFormProps) {
-  const navigate = useNavigate()
+  const [signInError, setSignInError] = useState(false)
+  const { setUserName } = useContext(AuthenticationContext)
 
   const {
     register,
@@ -31,20 +33,20 @@ export default function LoginForm({ enableRegisterForm }: LoginFormProps) {
 
   const handleUserLogin = async (data: LoginFormSchema) => {
     try {
-      await api.post(
+      const response = await api.post(
         '/signin',
         { email: data.email, password: data.password },
         { withCredentials: true },
       )
-
-      // TODO: redirect to user home page
-      navigate('/home')
+      setSignInError(false)
+      setUserName(response.data.name)
     } catch (error) {
-      if (error instanceof AxiosError && error?.response?.data?.message) {
-        return alert(error.response.data.message)
+      if (error instanceof AxiosError) {
+        console.error(error)
+        if (error.response?.status === 404) {
+          setSignInError(true)
+        }
       }
-
-      console.error(error)
     }
   }
 
@@ -84,26 +86,32 @@ export default function LoginForm({ enableRegisterForm }: LoginFormProps) {
               {errors.password.message}
             </span>
           )}
+
+          {signInError && (
+            <span className="text-red-400 text-xs pl-4 text-left">
+              email e/ou senha não encontrados
+            </span>
+          )}
         </div>
         <button
           disabled={isSubmitting}
           type="submit"
           className="rounded-3xl border-2 border-solid border-teal-300 
-        bg-teal-300 text-zinc-900 text-xs font-bold py-3 px-11 tracking-wider 
-        uppercase hover:bg-teal-400 hover:border-teal-400 hover:duration-200 
-        disabled:opacity-50
-        active:scale-95 focus:outline-none"
+          bg-teal-300 text-zinc-900 text-xs font-bold py-3 px-11 tracking-wider 
+           uppercase hover:bg-teal-400 hover:border-teal-400 hover:duration-200 
+           disabled:opacity-50
+          active:scale-95 focus:outline-none"
         >
           Entrar
         </button>
         <button
           disabled={isSubmitting}
           type="button"
-          className="mt-2 rounded-3xl border-2 border-solid border-teal-300
-          bg-transparent text-zinc-900 text-xs font-bold py-3 px-11 tracking-wider 
-          uppercase hover:bg-zinc-100 hover:border-teal-400 hover:duration-200 
-          disabled:opacity-50
-          active:scale-95 focus:outline-none"
+          className="mt-2 rounded-3xl border-2 border-solid border-zinc-500
+            bg-transparent text-zinc-900 text-xs font-bold py-3 px-11 tracking-wider 
+            uppercase hover:bg-zinc-100 hover:duration-200 
+            disabled:opacity-50
+            active:scale-95 focus:outline-none"
           onClick={() => enableRegisterForm(true)}
         >
           Criar uma conta

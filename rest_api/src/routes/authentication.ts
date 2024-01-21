@@ -45,7 +45,9 @@ export async function authenticationRoutes(app: FastifyInstance) {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
     })
 
-    return reply.status(200).send()
+    return reply.status(200).send({
+      name: user.name,
+    })
   })
 
   app.post('/signup', async (req, reply) => {
@@ -60,7 +62,7 @@ export async function authenticationRoutes(app: FastifyInstance) {
     // verify if user already exists
     const existingUser = await knex('users').where({ email }).first()
     if (existingUser) {
-      return reply.status(409).send()
+      return reply.status(422).send()
     }
 
     // create user session id & set cookie
