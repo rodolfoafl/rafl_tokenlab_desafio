@@ -109,9 +109,9 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
     setEvents((oldState) => oldState.filter((event) => event.id !== id))
   }
 
-  useEffect(() => {
-    fetchEvents()
-  }, [fetchEvents])
+  // useEffect(() => {
+  //   fetchEvents()
+  // }, [fetchEvents])
 
   return (
     <EventsContext.Provider

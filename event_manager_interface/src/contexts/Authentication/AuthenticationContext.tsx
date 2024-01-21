@@ -1,9 +1,9 @@
 import { useCookies } from 'react-cookie'
-import { createContext, useState } from 'react'
+import { createContext } from 'react'
 
 interface AuthenticationContextType {
   userSessionId: string | null
-  userName: string
+  userName: string | null
   setUserName: (value: string) => void
   logout: () => void
 }
@@ -13,12 +13,15 @@ export const AuthenticationContext = createContext(
 )
 
 export const AuthenticationContextProvider = ({ children }: any) => {
-  const [userName, setUserName] = useState('')
+  const setStoredUserName = (value: string) => {
+    localStorage.setItem('userName', value)
+  }
 
   const [cookie, setCookie, removeCookie] = useCookies(['userSessionId'])
   const userSessionId = cookie.userSessionId
 
   const logout = () => {
+    localStorage.removeItem('userName')
     removeCookie('userSessionId')
   }
 
@@ -26,8 +29,8 @@ export const AuthenticationContextProvider = ({ children }: any) => {
     <AuthenticationContext.Provider
       value={{
         userSessionId,
-        userName,
-        setUserName,
+        userName: localStorage.getItem('userName'),
+        setUserName: setStoredUserName,
         logout,
       }}
     >

@@ -5,8 +5,7 @@ import EventList from '../../components/Events/event-list'
 import EventCreate from '../../components/Events/event-create-edit'
 
 export default function Home() {
-  const { userName, logout } = useContext(AuthenticationContext)
-  const firstName = userName?.split(' ')[0]
+  const { logout } = useContext(AuthenticationContext)
 
   const navigate = useNavigate()
 
@@ -22,7 +21,8 @@ export default function Home() {
       <div className="w-[90vw] h-[90vh] bg-white rounded-3xl flex flex-col py-4 px-6 gap-6">
         <div className="w-full flex items-center justify-between">
           <span>
-            bem-vindo <strong>{firstName}</strong>
+            {/* bem-vindo <strong>{firstName}</strong> */}
+            Bem-vindo! Gerencie seus eventos
           </span>
           <button
             type="button"

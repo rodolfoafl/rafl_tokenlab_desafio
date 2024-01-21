@@ -2,16 +2,22 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { Pencil, XCircle } from '@phosphor-icons/react'
 
 import * as zod from 'zod'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useContextSelector } from 'use-context-selector'
 import { EventsContext } from '../../contexts/Events/EventsContext'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
+import 'dayjs/locale/pt-br'
+import dayjs from 'dayjs'
+// import dayjs from 'dayjs'
 
 const eventFormSchema = zod.object({
-  description: zod.string().min(6, { message: 'a descrição é obrigatória' }),
-  startDate: zod.string().min(2, { message: 'a data de início é obrigatória' }),
-  endDate: zod.string().min(2, { message: 'a data de fim é obrigatória' }),
+  description: zod.string().min(1, { message: 'a descrição é obrigatória' }),
+  startDate: zod.string().min(1, { message: 'a data de início é obrigatória' }),
+  endDate: zod.string().min(1, { message: 'a data de fim é obrigatória' }),
 })
 
 type EventFormInputs = zod.infer<typeof eventFormSchema>
@@ -31,6 +37,7 @@ export default function EventCreate({
   event,
 }: EventFormProps) {
   const {
+    control,
     register,
     handleSubmit,
     setValue,
@@ -58,6 +65,8 @@ export default function EventCreate({
   })
 
   const handleFormSubmit = async (data: EventFormInputs) => {
+    console.log(data)
+
     if (!isEditMode) {
       return handleCreateEvent(data)
     }
@@ -84,6 +93,7 @@ export default function EventCreate({
   useEffect(() => {
     if (isEditMode && event) {
       setValue('description', event.description)
+      // setValue('startDate', dayjs(event.startDate).format('MM/DD/YYYY HH:mm'))
       setValue('startDate', event.startDate)
       setValue('endDate', event.endDate)
     }
@@ -112,6 +122,9 @@ export default function EventCreate({
       <Dialog.Portal>
         <Dialog.Overlay className="fixed w-full h-full inset-0 bg-zinc-900 bg-opacity-75">
           <Dialog.Content
+            onInteractOutside={(e) => {
+              e.preventDefault()
+            }}
             className="w-[320px] border rounded-md py-10 px-10 bg-zinc-100 fixed top-1/2 
               left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-6"
           >
@@ -142,28 +155,62 @@ export default function EventCreate({
                   {errors.description.message}
                 </span>
               )}
-              <input
-                className="bg-zinc-200 border-none py-3 px-4 my-2 mx-0 w-full placeholder:text-zinc-500 placeholder:text-sm"
-                type="text"
-                placeholder="data início"
-                {...register('startDate')}
-              />
-              {errors.startDate && (
-                <span className="text-red-400 text-xs pl-4 text-left">
-                  {errors.startDate.message}
-                </span>
-              )}
-              <input
-                className="bg-zinc-200 border-none py-3 px-4 my-2 mx-0 w-full placeholder:text-zinc-500 placeholder:text-sm"
-                type="text"
-                placeholder="data fim"
-                {...register('endDate')}
-              />
-              {errors.endDate && (
-                <span className="text-red-400 text-xs pl-4 text-left">
-                  {errors.endDate.message}
-                </span>
-              )}
+
+              <LocalizationProvider
+                dateAdapter={AdapterDayjs}
+                adapterLocale="pt-br"
+              >
+                <div className="mt-4">
+                  <Controller
+                    name="startDate"
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <DateTimePicker
+                          minDateTime={dayjs(new Date())}
+                          minutesStep={15}
+                          className="bg-zinc-200 border-none py-3 px-4 my-2 mx-0 w-full placeholder:text-zinc-500 placeholder:text-sm"
+                          label="data de início"
+                          value={dayjs(field.value)}
+                          onChange={(newValue) =>
+                            field.onChange(
+                              dayjs(newValue).format('YYYY-MM-DD HH:mm'),
+                            )
+                          }
+                        />
+                      )
+                    }}
+                  />
+                </div>
+
+                <div className="mt-4">
+                  <Controller
+                    name="endDate"
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <DateTimePicker
+                          disablePast={true}
+                          minutesStep={15}
+                          minDateTime={dayjs(new Date()).add(15, 'minute')}
+                          className="bg-zinc-200 border-none py-3 px-4 my-2 mx-0 w-full placeholder:text-zinc-500 placeholder:text-sm"
+                          label="data de término"
+                          value={
+                            !isEditMode
+                              ? dayjs(field.value).add(15, 'minute')
+                              : dayjs(field.value)
+                          }
+                          onChange={(newValue) =>
+                            field.onChange(
+                              dayjs(newValue).format('YYYY-MM-DD HH:mm'),
+                            )
+                          }
+                        />
+                      )
+                    }}
+                  />
+                </div>
+              </LocalizationProvider>
 
               {displaySuccessMessage && (
                 <span className="text-green-500 text-base text-center">

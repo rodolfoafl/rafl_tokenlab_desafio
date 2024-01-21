@@ -22,7 +22,7 @@ export default function EventList() {
   }, [userSessionId, fetchEvents])
 
   return (
-    <div className="w-full border border-zinc-500 flex flex-col items-center p-4 gap-4">
+    <div className="w-full  flex flex-col items-center p-4 gap-4">
       {events && events.length > 0 ? (
         events.map((userEvent) => {
           return <EventItem key={userEvent.id} event={userEvent} />

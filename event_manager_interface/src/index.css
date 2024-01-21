@@ -16,6 +16,10 @@ input:focus{
   box-shadow: 0 0 0 2px #2e2e2e;
 }
 
+body{
+  pointer-events: auto !important;
+}
+
 body, input, textarea, button{
   font: 400 1rem 'Roboto', sans-serif;
 }

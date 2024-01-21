@@ -24,7 +24,7 @@ type RegisterFormSchema = z.infer<typeof registerFormSchema>
 export default function RegisterForm({
   enableRegisterForm,
 }: RegisterFormProps) {
-  const { setUserName } = useContext(AuthenticationContext)
+  // const { setUserName } = useContext(AuthenticationContext)
 
   const [signUpErrorMessage, setSignUpErrorMessage] = useState(false)
   const [redirectMessage, setRedirectMessage] = useState(false)
@@ -44,7 +44,7 @@ export default function RegisterForm({
         { name: data.name, email: data.email, password: data.password },
         { withCredentials: true },
       )
-      setUserName(data.name)
+      // setUserName(data.name)
 
       setSignUpErrorMessage(false)
       setRedirectMessage(true)

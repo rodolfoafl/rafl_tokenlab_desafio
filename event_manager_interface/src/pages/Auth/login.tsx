@@ -21,7 +21,7 @@ type LoginFormSchema = z.infer<typeof loginFormSchema>
 
 export default function LoginForm({ enableRegisterForm }: LoginFormProps) {
   const [signInError, setSignInError] = useState(false)
-  const { setUserName } = useContext(AuthenticationContext)
+  // const { setUserName } = useContext(AuthenticationContext)
 
   const {
     register,
@@ -39,7 +39,7 @@ export default function LoginForm({ enableRegisterForm }: LoginFormProps) {
         { withCredentials: true },
       )
       setSignInError(false)
-      setUserName(response.data.name)
+      // setUserName(response.data.name)
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(error)
